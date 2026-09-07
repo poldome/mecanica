@@ -136,17 +136,19 @@ function buildBackupPayload(){
 function prepareShareFile(){
  pendingShareFile=null;
  if(!window.isSecureContext)return{ok:false,reason:'La página debe abrirse por HTTPS'};
- if(!navigator.share||!navigator.canShare)return{ok:false,reason:'Este navegador no permite compartir archivos'};
+ if('showSaveFilePicker' in window)return{ok:true,mode:'picker'};
+ if(!navigator.share||!navigator.canShare)return{ok:false,reason:'Este navegador no permite elegir destino'};
  const {json,base}=buildBackupPayload();
  for(const [ext,type] of [['.txt','text/plain'],['.json','application/json'],['.csv','text/csv']]){
   try{
    const f=new File([json],base+ext,{type});
-   if(navigator.canShare({files:[f]})){pendingShareFile=f;return{ok:true}}
+   if(navigator.canShare({files:[f]})){pendingShareFile=f;return{ok:true,mode:'share'}}
   }catch(e){}
  }
  return{ok:false,reason:'El sistema no admite compartir este archivo'};
 }
-function shareBackup(){
+function chooseDestination(){
+ if('showSaveFilePicker' in window){pickAndSaveBackup();return}
  if(!pendingShareFile){toast('No hay archivo preparado');return}
  navigator.share({files:[pendingShareFile]}).then(()=>{
   closeModal();toast('Copia enviada al destino elegido');
@@ -154,22 +156,21 @@ function shareBackup(){
   const n=err&&err.name;
   if(n==='AbortError'){toast('Guardado cancelado');return}
   if(n==='NotAllowedError'){shareTextFallback();return}
-  toast('No se pudo compartir: '+(err&&err.message?err.message:n||'error'));
+  toast('No se pudo guardar: '+(err&&err.message?err.message:n||'error'));
  });
 }
 function shareTextFallback(){
  const {json}=buildBackupPayload();
- if(!navigator.share){toast('Compartir no disponible. Usa Descargar.');return}
+ if(!navigator.share){toast('Usa Descargar en el dispositivo');return}
  navigator.share({title:'Copia de seguridad de vehículos',text:json}).then(()=>{
-  closeModal();toast('Copia enviada como texto');
+  closeModal();toast('Copia enviada al destino elegido');
  }).catch(err=>{
   if(err&&err.name==='AbortError'){toast('Guardado cancelado');return}
-  toast('Permiso denegado por el navegador. Usa Descargar.');
+  toast('Permiso denegado. Usa Descargar en el dispositivo.');
  });
 }
 async function pickAndSaveBackup(){
  const {json,base}=buildBackupPayload();
- if(!('showSaveFilePicker' in window)){toast('Este navegador no permite elegir carpeta');return}
  try{
   const handle=await window.showSaveFilePicker({suggestedName:base+'.json',types:[{description:'Copia de seguridad JSON',accept:{'application/json':['.json']}}]});
   const w=await handle.createWritable();await w.write(json);await w.close();
@@ -188,14 +189,12 @@ function downloadBackup(){
 }
 function exportDB(){
  if(!db.vehicles.length&&!confirm('La base de datos está vacía. ¿Quieres exportarla igualmente?'))return;
- const sup=prepareShareFile(),picker='showSaveFilePicker' in window;
+ const sup=prepareShareFile();
  modal(`<div class="modal-head"><h2>Guardar copia</h2><button class="close" onclick="closeModal()">×</button></div>
  <div class="modal-body"><div class="save-options">
-  <button class="btn btn-primary save-option" ${sup.ok?'':'disabled'} onclick="shareBackup()"><strong>Enviar a Drive, Dropbox, Archivos…</strong><small>${sup.ok?'Se abrirá el menú del sistema para elegir destino':esc(sup.reason)}</small></button>
-  ${navigator.share?`<button class="btn btn-soft save-option" onclick="shareTextFallback()"><strong>Compartir como texto</strong><small>Alternativa si el envío de archivo falla</small></button>`:''}
-  ${picker?`<button class="btn btn-soft save-option" onclick="pickAndSaveBackup()"><strong>Elegir carpeta del equipo</strong><small>Diálogo Guardar como</small></button>`:''}
+  <button class="btn btn-primary save-option" ${sup.ok?'':'disabled'} onclick="chooseDestination()"><strong>Elegir dónde guardar</strong><small>${sup.ok?(sup.mode==='picker'?'Diálogo Guardar como del equipo':'Drive, Dropbox, Archivos…'):esc(sup.reason)}</small></button>
   <button class="btn btn-soft save-option" onclick="downloadBackup()"><strong>Descargar en el dispositivo</strong><small>Se guardará en la carpeta de descargas</small></button>
- </div><div class="hint" style="margin-top:12px">Si Android responde «Permission denied», abre la app desde la pestaña normal de Chrome (no en modo incógnito ni dentro de otra aplicación) y vuelve a intentarlo.</div></div>`);
+ </div></div>`);
 }
 function importDB(file){const reader=new FileReader();reader.onload=()=>{try{const x=JSON.parse(reader.result);if(!x||!Array.isArray(x.vehicles))throw Error();if(!confirm(`Se importarán ${x.vehicles.length} vehículos y se reemplazarán los datos actuales. ¿Continuar?`))return;db=x;db.version=1;if(saveDB())toast('Base de datos importada correctamente')}catch(e){toast('El archivo no es una copia de seguridad válida')}};reader.readAsText(file)}
 
