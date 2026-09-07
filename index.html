@@ -30,6 +30,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text"
 .backup-strip{padding:7px 10px;min-height:44px;border-radius:15px}.backup-buttons{gap:6px}.backup-buttons .btn{padding:6px 10px!important;min-height:30px;font-size:12px;border-radius:10px;box-shadow:none}.backup-copy strong{font-size:12px!important}.backup-copy small{font-size:10px!important}.vehicle-head{position:relative}.vehicle-card.has-warning .vehicle-head:before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 4px 4px 0;background:var(--orange)}.vehicle-card.has-overdue .vehicle-head:before{background:var(--red)}.schedule-box{grid-column:1/-1;padding:13px;border-radius:16px;background:#f5f1ee;border:1px solid var(--line)}.schedule-box h4{margin:0 0 10px;font-size:14px}.schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.reminder-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.reminder-item{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff}.reminder-main strong{display:block;font-size:13px}.reminder-main small{display:block;color:var(--muted);margin-top:3px}.warning-summary{margin-top:10px}.vehicle-card.expanded .vehicle-body{animation:revealCard .2s ease-out}@keyframes revealCard{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 @media(max-width:650px){.backup-strip{flex-direction:row;align-items:center}.backup-strip .backup-copy{display:none}.backup-buttons{display:flex;margin-left:auto}.backup-buttons .btn{width:auto!important;flex:none!important;padding:6px 9px!important}.schedule-grid{grid-template-columns:1fr}.reminder-item{align-items:flex-start}.reminder-item .record-tools{flex-shrink:0}}
 .save-options{display:flex;flex-direction:column;gap:10px}.save-option{width:100%;flex-direction:column;align-items:flex-start;gap:3px;padding:14px 16px;text-align:left;border-radius:16px}.save-option strong{font-size:14px}.save-option small{font-weight:500;opacity:.75;font-size:12px}.save-option[disabled]{opacity:.45;cursor:not-allowed}
+.modal-head .head-actions{display:flex;align-items:center;gap:8px}.btn-excel{background:#1d6f42;color:#fff;border:0;border-radius:11px;padding:7px 12px;font-size:12.5px;font-weight:650;display:inline-flex;align-items:center;gap:6px}.btn-excel:hover{opacity:.9}.btn-excel[disabled]{opacity:.5;cursor:not-allowed}@media(max-width:650px){.btn-excel{padding:6px 9px;font-size:11.5px}.btn-excel .btn-excel-txt{display:none}}
 .lang-switch{display:inline-flex;gap:2px;padding:3px;border-radius:12px;background:#fff;border:1px solid var(--line)}.lang-switch button{border:0;background:transparent;color:var(--muted);font-size:12px;font-weight:650;padding:6px 10px;border-radius:9px;letter-spacing:.02em;transition:.16s}.lang-switch button.active{background:#24201e;color:#fff}@media(max-width:650px){.lang-switch button{padding:5px 8px;font-size:11px}}
   </style>
 </head>
@@ -144,6 +145,15 @@ const T={
   stOpen:'Oberta',stRepair:'En reparació',stClosed:'Tancada',
   prLow:'Baixa',prMid:'Mitjana',prHigh:'Alta',
   tyMaint:'Manteniment',tyRepair:'Reparació / revisió',tyItv:'ITV',tyIns:'Assegurança',tyOther:'Altres',
+  xlsExport:'Excel',xlsExportTitle:'Descarregar Excel',xlsTitle:'Informe del vehicle',
+  xlsGenerated:'Generat el',xlsVehicleData:'DADES DEL VEHICLE',xlsKpi:'INDICADORS',xlsCosts:'COSTOS',
+  xlsCostMaint:'Cost en manteniments',xlsCostBreak:'Cost en avaries',xlsCostPerKm:'Cost per quilòmetre',
+  xlsAvgRecord:'Cost mitjà per intervenció',xlsKmRange:'Quilòmetres recorreguts registrats',
+  xlsTotal:'TOTAL',xlsSource:'Origen',xlsKmLeft:'Km restants',xlsManual:'Manual',
+  xlsExpired:'Vençut',xlsSoon:'Proper',xlsOk:'Al dia',
+  xlsSummary:'Resum',xlsMaint:'Manteniments',xlsBreak:'Avaries',xlsAlerts:'Avisos',xlsAnalysis:'Anàlisi',
+  xlsCostByYear:'COST PER ANY',xlsYear:'Any',xlsCostByType:'COST PER TIPUS',xlsShare:'% del total',
+  xlsKmEvolution:'EVOLUCIÓ DEL QUILOMETRATGE',xlsReady:'Excel generat',xlsFail:'No s\'ha pogut generar l\'Excel',
   noDate:'Sense data'
  },
  es:{
@@ -222,6 +232,15 @@ const T={
   stOpen:'Abierta',stRepair:'En reparación',stClosed:'Cerrada',
   prLow:'Baja',prMid:'Media',prHigh:'Alta',
   tyMaint:'Mantenimiento',tyRepair:'Reparación / revisión',tyItv:'ITV',tyIns:'Seguro',tyOther:'Otro',
+  xlsExport:'Excel',xlsExportTitle:'Descargar Excel',xlsTitle:'Informe del vehículo',
+  xlsGenerated:'Generado el',xlsVehicleData:'DATOS DEL VEHÍCULO',xlsKpi:'INDICADORES',xlsCosts:'COSTES',
+  xlsCostMaint:'Coste en mantenimientos',xlsCostBreak:'Coste en averías',xlsCostPerKm:'Coste por kilómetro',
+  xlsAvgRecord:'Coste medio por intervención',xlsKmRange:'Kilómetros recorridos registrados',
+  xlsTotal:'TOTAL',xlsSource:'Origen',xlsKmLeft:'Km restantes',xlsManual:'Manual',
+  xlsExpired:'Vencido',xlsSoon:'Próximo',xlsOk:'Al día',
+  xlsSummary:'Resumen',xlsMaint:'Mantenimientos',xlsBreak:'Averías',xlsAlerts:'Avisos',xlsAnalysis:'Análisis',
+  xlsCostByYear:'COSTE POR AÑO',xlsYear:'Año',xlsCostByType:'COSTE POR TIPO',xlsShare:'% del total',
+  xlsKmEvolution:'EVOLUCIÓN DEL KILOMETRAJE',xlsReady:'Excel generado',xlsFail:'No se ha podido generar el Excel',
   noDate:'Sin fecha'
  }
 };
@@ -283,7 +302,7 @@ function openVehicleForm(id=null){const v=id?vehicleById(id):{};modal(`<form id=
  <div class="field full"><label>${t('notes')}</label><textarea name="notes" placeholder="${t('notesPh')}">${esc(v.notes||'')}</textarea></div></div></div><div class="modal-foot"><button type="button" class="btn btn-soft" onclick="closeModal()">${t('cancel')}</button><button class="btn btn-primary">${t('saveVehicle')}</button></div></form>`);
  $('#vehicleForm').onsubmit=e=>{e.preventDefault();const x=Object.fromEntries(new FormData(e.target));x.year=x.year?Number(x.year):'';if(id){Object.assign(v,x)}else db.vehicles.push({...x,id:uid('veh'),createdAt:new Date().toISOString(),maintenance:[],breakdowns:[],reminders:[]});if(saveDB()){closeModal();toast(t('vehicleSaved'))}}}
 function deleteVehicle(id){const v=vehicleById(id);if(confirm(t('confirmDeleteVehicle',{plate:v.plate}))){db.vehicles=db.vehicles.filter(x=>x.id!==id);saveDB();toast(t('vehicleDeleted'))}}
-function openDetail(id,tab='overview'){currentVehicleId=id;const v=vehicleById(id);modal(`<div class="modal-head"><h2>${t('vehicleFile')}</h2><button class="close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="detail-header"><div><h3>${esc(v.brand)} ${esc(v.model)}</h3><div class="plate">${esc(v.plate)}</div></div><div class="detail-km">${currentKm(v)?num(currentKm(v))+' km':t('noMileage')}<div style="font-size:12px;font-weight:500;opacity:.7">${t('lastRecord')}</div></div></div>
+function openDetail(id,tab='overview'){currentVehicleId=id;const v=vehicleById(id);modal(`<div class="modal-head"><h2>${t('vehicleFile')}</h2><div class="head-actions"><button class="btn-excel" title="${t('xlsExportTitle')}" onclick="downloadVehicleExcel('${id}')">▦ <span class="btn-excel-txt">${t('xlsExport')}</span></button><button class="close" onclick="closeModal()">×</button></div></div><div class="modal-body"><div class="detail-header"><div><h3>${esc(v.brand)} ${esc(v.model)}</h3><div class="plate">${esc(v.plate)}</div></div><div class="detail-km">${currentKm(v)?num(currentKm(v))+' km':t('noMileage')}<div style="font-size:12px;font-weight:500;opacity:.7">${t('lastRecord')}</div></div></div>
  <div class="tabs"><button class="tab ${tab==='overview'?'active':''}" data-tab="overview">${t('tabOverview')}</button><button class="tab ${tab==='maintenance'?'active':''}" data-tab="maintenance">${t('tabMaint')} (${(v.maintenance||[]).length})</button><button class="tab ${tab==='breakdowns'?'active':''}" data-tab="breakdowns">${t('tabBreak')} (${(v.breakdowns||[]).length})</button><button class="tab ${tab==='gallery'?'active':''}" data-tab="gallery">${t('tabGallery')}</button></div>
  <div id="detailContents">${detailContents(v,tab)}</div></div>`,true);$$('.tab').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab))}
 function switchTab(tab){$$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$('#detailContents').innerHTML=detailContents(vehicleById(currentVehicleId),tab)}
@@ -375,6 +394,350 @@ function exportDB(){
   <button class="btn btn-soft save-option" onclick="downloadBackup()"><strong>${t('downloadDevice')}</strong><small>${t('downloadHint')}</small></button>
  </div></div>`);
 }
+/* ===== Exportació a Excel · generador XLSX natiu (sense llibreries) ===== */
+const XLSX_CRC=(function(){const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function xlsxCrc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=XLSX_CRC[(c^b[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function xlsxZip(files){
+ const enc=new TextEncoder(),parts=[],central=[];let off=0;
+ const u16=n=>[n&255,(n>>8)&255],u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255];
+ files.forEach(f=>{
+  const name=enc.encode(f.name),data=typeof f.data==='string'?enc.encode(f.data):f.data,crc=xlsxCrc32(data);
+  const lh=[].concat([0x50,0x4b,0x03,0x04],u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0));
+  parts.push(new Uint8Array(lh),name,data);
+  central.push({name,crc,len:data.length,off});
+  off+=lh.length+name.length+data.length;
+ });
+ const cd=[];let cdLen=0;
+ central.forEach(c=>{
+  const h=[].concat([0x50,0x4b,0x01,0x02],u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),u32(c.crc),u32(c.len),u32(c.len),u16(c.name.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(c.off));
+  cd.push(new Uint8Array(h),c.name);cdLen+=h.length+c.name.length;
+ });
+ const eocd=new Uint8Array([].concat([0x50,0x4b,0x05,0x06],u16(0),u16(0),u16(central.length),u16(central.length),u32(cdLen),u32(off),u16(0)));
+ const all=parts.concat(cd,[eocd]);let total=0;all.forEach(a=>total+=a.length);
+ const out=new Uint8Array(total);let p=0;all.forEach(a=>{out.set(a,p);p+=a.length});
+ return out;
+}
+function xe(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]))}
+function xcol(i){let s='',n=i+1;while(n>0){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s}
+function xserial(d){if(!d)return null;const ms=Date.parse(d+'T00:00:00Z');if(isNaN(ms))return null;return Math.floor((ms-Date.UTC(1899,11,30))/86400000)}
+/* estils: 0 base · 1 negreta · 2 capçalera · 3 data · 4 moneda · 5 enter · 6 títol · 7 total moneda · 8 total text · 9 total enter · 10 text ajustat · 11 subtítol */
+const XLSX_STYLES=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<numFmts count="2"><numFmt numFmtId="164" formatCode="#,##0.00\\ &quot;€&quot;"/><numFmt numFmtId="165" formatCode="#,##0"/></numFmts>
+<fonts count="5">
+<font><sz val="11"/><color rgb="FF1D1B1A"/><name val="Calibri"/></font>
+<font><b/><sz val="11"/><color rgb="FF1D1B1A"/><name val="Calibri"/></font>
+<font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>
+<font><b/><sz val="16"/><color rgb="FF17161A"/><name val="Calibri"/></font>
+<font><b/><sz val="12"/><color rgb="FF8E4F37"/><name val="Calibri"/></font>
+</fonts>
+<fills count="4">
+<fill><patternFill patternType="none"/></fill>
+<fill><patternFill patternType="gray125"/></fill>
+<fill><patternFill patternType="solid"><fgColor rgb="FF17161A"/><bgColor indexed="64"/></patternFill></fill>
+<fill><patternFill patternType="solid"><fgColor rgb="FFF1EFEC"/><bgColor indexed="64"/></patternFill></fill>
+</fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>
+<border><left/><right/><top style="thin"><color rgb="FFBDB5AE"/></top><bottom/><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="12">
+<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
+<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/>
+<xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="14" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>
+<xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>
+<xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>
+<xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+<xf numFmtId="164" fontId="1" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1"/>
+<xf numFmtId="0" fontId="1" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
+<xf numFmtId="165" fontId="1" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1"/>
+<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+</cellXfs>
+<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>
+</styleSheet>`;
+function xsheet(rows,opts){
+ opts=opts||{};
+ let cols='';
+ if(opts.widths)cols='<cols>'+opts.widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')+'</cols>';
+ let views='<sheetViews><sheetView workbookViewId="0"'+(opts.tab?' tabSelected="1"':'')+'>'+
+  (opts.freeze?`<pane ySplit="${opts.freeze}" topLeftCell="A${opts.freeze+1}" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft"/>`:'')+
+  '</sheetView></sheetViews>';
+ let body='';
+ rows.forEach((cells,ri)=>{
+  if(!cells||!cells.length){body+=`<row r="${ri+1}"/>`;return}
+  let rc='';
+  cells.forEach((c,ci)=>{
+   if(c===null||c===undefined)return;
+   if(typeof c!=='object')c={v:c};
+   const ref=xcol(ci)+(ri+1),st=c.s?` s="${c.s}"`:'';
+   if(c.f!==undefined){rc+=`<c r="${ref}"${st}><f>${xe(c.f)}</f></c>`}
+   else if(c.v===null||c.v===undefined||c.v===''){if(c.s)rc+=`<c r="${ref}"${st}/>`}
+   else if(typeof c.v==='number'){rc+=`<c r="${ref}"${st}><v>${c.v}</v></c>`}
+   else{rc+=`<c r="${ref}"${st} t="inlineStr"><is><t xml:space="preserve">${xe(c.v)}</t></is></c>`}
+  });
+  body+=`<row r="${ri+1}"${opts.headerRow===ri+1?' ht="20" customHeight="1"':''}>${rc}</row>`;
+ });
+ return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${views}<sheetFormatPr defaultRowHeight="15"/>${cols}<sheetData>${body}</sheetData>${opts.filter?`<autoFilter ref="${opts.filter}"/>`:''}${opts.drawing?'<drawing r:id="rId1"/>':''}</worksheet>`;
+}
+function xchartBar(title,sheet,catRef,valRef,serName,color){
+ const q=`'${sheet}'!`;
+ return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+<c:chart><c:title><c:tx><c:rich><a:bodyPr/><a:p><a:pPr><a:defRPr sz="1200" b="1"/></a:pPr><a:r><a:rPr lang="es-ES" sz="1200" b="1"/><a:t>${xe(title)}</a:t></a:r></a:p></c:rich></c:tx><c:overlay val="0"/></c:title><c:autoTitleDeleted val="0"/>
+<c:plotArea><c:layout/><c:barChart><c:barDir val="col"/><c:grouping val="clustered"/><c:varyColors val="0"/>
+<c:ser><c:idx val="0"/><c:order val="0"/><c:tx><c:v>${xe(serName)}</c:v></c:tx>
+<c:spPr><a:solidFill><a:srgbClr val="${color}"/></a:solidFill></c:spPr>
+<c:cat><c:strRef><c:f>${q}${catRef}</c:f></c:strRef></c:cat>
+<c:val><c:numRef><c:f>${q}${valRef}</c:f></c:numRef></c:val></c:ser>
+<c:gapWidth val="70"/><c:axId val="111111111"/><c:axId val="222222222"/></c:barChart>
+<c:catAx><c:axId val="111111111"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:delete val="0"/><c:axPos val="b"/><c:crossAx val="222222222"/></c:catAx>
+<c:valAx><c:axId val="222222222"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:delete val="0"/><c:axPos val="l"/><c:majorGridlines/><c:numFmt formatCode="#,##0" sourceLinked="0"/><c:crossAx val="111111111"/></c:valAx>
+</c:plotArea><c:plotVisOnly val="1"/><c:dispBlanksAs val="gap"/></c:chart></c:chartSpace>`;
+}
+function xchartPie(title,sheet,catRef,valRef,serName){
+ const q=`'${sheet}'!`;
+ return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+<c:chart><c:title><c:tx><c:rich><a:bodyPr/><a:p><a:pPr><a:defRPr sz="1200" b="1"/></a:pPr><a:r><a:rPr lang="es-ES" sz="1200" b="1"/><a:t>${xe(title)}</a:t></a:r></a:p></c:rich></c:tx><c:overlay val="0"/></c:title><c:autoTitleDeleted val="0"/>
+<c:plotArea><c:layout/><c:pieChart><c:varyColors val="1"/>
+<c:ser><c:idx val="0"/><c:order val="0"/><c:tx><c:v>${xe(serName)}</c:v></c:tx>
+<c:dLbls><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="1"/><c:showBubbleSize val="0"/></c:dLbls>
+<c:cat><c:strRef><c:f>${q}${catRef}</c:f></c:strRef></c:cat>
+<c:val><c:numRef><c:f>${q}${valRef}</c:f></c:numRef></c:val></c:ser>
+<c:firstSliceAng val="0"/></c:pieChart></c:plotArea><c:legend><c:legendPos val="r"/><c:overlay val="0"/></c:legend><c:plotVisOnly val="1"/></c:chart></c:chartSpace>`;
+}
+function xchartLine(title,sheet,catRef,valRef,serName,color){
+ const q=`'${sheet}'!`;
+ return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+<c:chart><c:title><c:tx><c:rich><a:bodyPr/><a:p><a:pPr><a:defRPr sz="1200" b="1"/></a:pPr><a:r><a:rPr lang="es-ES" sz="1200" b="1"/><a:t>${xe(title)}</a:t></a:r></a:p></c:rich></c:tx><c:overlay val="0"/></c:title><c:autoTitleDeleted val="0"/>
+<c:plotArea><c:layout/><c:lineChart><c:grouping val="standard"/><c:varyColors val="0"/>
+<c:ser><c:idx val="0"/><c:order val="0"/><c:tx><c:v>${xe(serName)}</c:v></c:tx>
+<c:spPr><a:ln w="28575"><a:solidFill><a:srgbClr val="${color}"/></a:solidFill></a:ln></c:spPr>
+<c:marker><c:symbol val="circle"/><c:size val="6"/><c:spPr><a:solidFill><a:srgbClr val="${color}"/></a:solidFill></c:spPr></c:marker>
+<c:cat><c:strRef><c:f>${q}${catRef}</c:f></c:strRef></c:cat>
+<c:val><c:numRef><c:f>${q}${valRef}</c:f></c:numRef></c:val><c:smooth val="0"/></c:ser>
+<c:marker val="1"/><c:axId val="333333333"/><c:axId val="444444444"/></c:lineChart>
+<c:catAx><c:axId val="333333333"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:delete val="0"/><c:axPos val="b"/><c:crossAx val="444444444"/></c:catAx>
+<c:valAx><c:axId val="444444444"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:delete val="0"/><c:axPos val="l"/><c:majorGridlines/><c:numFmt formatCode="#,##0" sourceLinked="0"/><c:crossAx val="333333333"/></c:valAx>
+</c:plotArea><c:plotVisOnly val="1"/><c:dispBlanksAs val="gap"/></c:chart></c:chartSpace>`;
+}
+function xanchor(id,name,c1,r1,c2,r2,rid){
+ return `<xdr:twoCellAnchor><xdr:from><xdr:col>${c1}</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>${r1}</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from>
+<xdr:to><xdr:col>${c2}</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>${r2}</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to>
+<xdr:graphicFrame macro=""><xdr:nvGraphicFramePr><xdr:cNvPr id="${id}" name="${xe(name)}"/><xdr:cNvGraphicFramePr/></xdr:nvGraphicFramePr>
+<xdr:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></xdr:xfrm>
+<a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/chart"><c:chart xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="${rid}"/></a:graphicData></a:graphic></xdr:graphicFrame><xdr:clientData/></xdr:twoCellAnchor>`;
+}
+function exportVehicleExcel(vehicleId){
+ const v=vehicleById(vehicleId);if(!v){toast(t('noFile'));return}
+ const H=2,B=0,C=4,D=3,K=5,TB=8,TC=7,TK=9,TT=6,ST=11,W=10;
+ const maint=[...(v.maintenance||[])].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+ const brk=[...(v.breakdowns||[])].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+ const rem=allReminders(v);
+ const recs=allRecords(v);
+ const km=currentKm(v),total=totalCost(v);
+ const kmMin=recs.length?Math.min(...recs.map(r=>Number(r.km)||0).filter(Boolean).concat([km])):0;
+ const nmMaint=t('xlsMaint'),nmBrk=t('xlsBreak'),nmRem=t('xlsAlerts'),nmAn=t('xlsAnalysis'),nmSum=t('xlsSummary');
+ /* --- full 1: resum --- */
+ const s1=[];
+ s1.push([{v:t('xlsTitle')+' · '+(v.brand||'')+' '+(v.model||''),s:TT}]);
+ s1.push([{v:t('xlsGenerated')+': '+new Date().toLocaleString(locale()),s:0}]);
+ s1.push([]);
+ s1.push([{v:t('xlsVehicleData'),s:ST}]);
+ const info=[[t('plate'),v.plate],[t('nickname'),v.nickname],[t('brand'),v.brand],[t('model'),v.model],[t('year'),v.year],[t('vin'),v.vin],[t('purchaseDate'),v.purchaseDate,'d'],[t('registrationDate'),v.registrationDate,'d'],[t('insurance'),v.insurance],[t('insuranceExpiry'),v.insuranceExpiry,'d'],[t('notes'),v.notes]];
+ info.forEach(([k,val,kind])=>{
+  if(kind==='d'){const sn=xserial(val);s1.push([{v:k,s:B},sn===null?{v:t('notSet')}:{v:sn,s:D}])}
+  else s1.push([{v:k,s:B},{v:val===undefined||val===null||val===''?t('notSet'):String(val)}]);
+ });
+ s1.push([]);
+ const kpiRow=s1.length;
+ s1.push([{v:t('xlsKpi'),s:ST}]);
+ const qM=`'${nmMaint}'`,qB=`'${nmBrk}'`;
+ s1.push([{v:t('lastKm'),s:B},{v:km,s:K}]);
+ s1.push([{v:t('xlsKmRange'),s:B},{v:km-kmMin>0?km-kmMin:0,s:K}]);
+ s1.push([{v:t('maintenancesL'),s:B},{v:maint.length,s:K}]);
+ s1.push([{v:t('breakdownsRec'),s:B},{v:brk.length,s:K}]);
+ s1.push([{v:t('openBreak'),s:B},{v:brk.filter(r=>r.status!=='Cerrada').length,s:K}]);
+ s1.push([{v:t('scheduledAlerts'),s:B},{v:rem.length,s:K}]);
+ s1.push([{v:t('activeAlerts'),s:B},{v:activeWarnings(v).length,s:K}]);
+ s1.push([]);
+ s1.push([{v:t('xlsCosts'),s:ST}]);
+ const cM=maint.length?`SUM(${qM}!F2:F${maint.length+1})`:'0';
+ const cB=brk.length?`SUM(${qB}!H2:H${brk.length+1})`:'0';
+ s1.push([{v:t('xlsCostMaint'),s:B},{f:cM,s:C}]);
+ s1.push([{v:t('xlsCostBreak'),s:B},{f:cB,s:C}]);
+ const rTot=s1.length+1;
+ s1.push([{v:t('totalCost'),s:TB},{f:`${cM}+${cB}`,s:TC}]);
+ s1.push([{v:t('xlsCostPerKm'),s:B},{f:`IF(${km-kmMin>0?km-kmMin:0}=0,0,B${rTot}/${km-kmMin>0?km-kmMin:0})`,s:C}]);
+ s1.push([{v:t('xlsAvgRecord'),s:B},{f:`IF(${recs.length}=0,0,B${rTot}/${recs.length})`,s:C}]);
+ /* --- full 2: manteniments --- */
+ const s2=[[{v:t('date'),s:H},{v:t('km'),s:H},{v:t('maintType'),s:H},{v:t('description'),s:H},{v:t('workshop'),s:H},{v:t('cost'),s:H},{v:t('nextDate'),s:H},{v:t('nextKm'),s:H},{v:t('images'),s:H}]];
+ maint.forEach(r=>{
+  const d=xserial(r.date),nd=xserial(r.nextDate);
+  s2.push([d===null?{v:''}:{v:d,s:D},{v:Number(r.km)||0,s:K},{v:tv(r.type)},{v:r.description||'',s:W},{v:r.workshop||''},{v:Number(r.cost)||0,s:C},nd===null?{v:''}:{v:nd,s:D},{v:Number(r.nextKm)||0,s:K},{v:(r.images||[]).length,s:K}]);
+ });
+ if(maint.length)s2.push([{v:t('xlsTotal'),s:TB},{v:'',s:TB},{v:'',s:TB},{v:'',s:TB},{v:'',s:TB},{f:`SUM(F2:F${maint.length+1})`,s:TC},{v:'',s:TB},{v:'',s:TB},{f:`SUM(I2:I${maint.length+1})`,s:TK}]);
+ /* --- full 3: avaries --- */
+ const s3=[[{v:t('date'),s:H},{v:t('km'),s:H},{v:t('breakTitle'),s:H},{v:t('description'),s:H},{v:t('status'),s:H},{v:t('priorityL'),s:H},{v:t('workshop'),s:H},{v:t('cost'),s:H},{v:t('nextDate'),s:H},{v:t('nextKm'),s:H}]];
+ brk.forEach(r=>{
+  const d=xserial(r.date),nd=xserial(r.nextDate);
+  s3.push([d===null?{v:''}:{v:d,s:D},{v:Number(r.km)||0,s:K},{v:r.title||''},{v:r.description||'',s:W},{v:tv(r.status)},{v:tv(r.priority)},{v:r.workshop||''},{v:Number(r.cost)||0,s:C},nd===null?{v:''}:{v:nd,s:D},{v:Number(r.nextKm)||0,s:K}]);
+ });
+ if(brk.length)s3.push([{v:t('xlsTotal'),s:TB},{v:'',s:TB},{v:'',s:TB},{v:'',s:TB},{v:'',s:TB},{v:'',s:TB},{v:'',s:TB},{f:`SUM(H2:H${brk.length+1})`,s:TC},{v:'',s:TB},{v:'',s:TB}]);
+ /* --- full 4: avisos --- */
+ const stName={expired:t('xlsExpired'),soon:t('xlsSoon'),ok:t('xlsOk')};
+ const s4=[[{v:t('type'),s:H},{v:t('description'),s:H},{v:t('dueDate'),s:H},{v:t('dueKm'),s:H},{v:t('xlsSource'),s:H},{v:t('status'),s:H},{v:t('xlsKmLeft'),s:H}]];
+ const srcName={manual:t('xlsManual'),maintenance:t('maintenancesL'),breakdown:t('breakdownsRec')};
+ rem.forEach(r=>{
+  const d=xserial(r.dueDate),st=reminderState(r,v),dk=Number(r.dueKm)||0;
+  s4.push([{v:tv(r.type)},{v:tv(r.description)||''},d===null?{v:''}:{v:d,s:D},{v:dk,s:K},{v:srcName[r.source]||r.source||''},{v:stName[st]||st},{v:dk?dk-km:0,s:K}]);
+ });
+ /* --- full 5: anàlisi + gràfics --- */
+ const byYear={},byType={};
+ recs.forEach(r=>{
+  const y=(r.date||'').slice(0,4)||'—';
+  byYear[y]=byYear[y]||{cost:0,n:0};byYear[y].cost+=Number(r.cost)||0;byYear[y].n++;
+  const key=r.kind==='maintenance'?(tv(r.type)||t('optOther')):t('breakdownsRec');
+  byType[key]=(byType[key]||0)+(Number(r.cost)||0);
+ });
+ const years=Object.keys(byYear).sort(),types=Object.keys(byType).sort((a,b)=>byType[b]-byType[a]);
+ const s5=[];
+ s5.push([{v:t('xlsAnalysis'),s:TT}]);
+ s5.push([]);
+ s5.push([{v:t('xlsCostByYear'),s:ST}]);
+ const yHead=s5.length+1;
+ s5.push([{v:t('xlsYear'),s:H},{v:t('totalCost'),s:H},{v:t('totalRecords'),s:H}]);
+ years.forEach(y=>s5.push([{v:y},{v:Math.round(byYear[y].cost*100)/100,s:C},{v:byYear[y].n,s:K}]));
+ const yFirst=yHead+1,yLast=yHead+years.length;
+ if(years.length)s5.push([{v:t('xlsTotal'),s:TB},{f:`SUM(B${yFirst}:B${yLast})`,s:TC},{f:`SUM(C${yFirst}:C${yLast})`,s:TK}]);
+ s5.push([]);
+ s5.push([{v:t('xlsCostByType'),s:ST}]);
+ const tHead=s5.length+1;
+ s5.push([{v:t('type'),s:H},{v:t('totalCost'),s:H},{v:t('xlsShare'),s:H}]);
+ const tFirst=tHead+1,tLast=tHead+types.length;
+ types.forEach(k=>s5.push([{v:k},{v:Math.round(byType[k]*100)/100,s:C},{f:`IF(SUM($B$${tFirst}:$B$${tLast})=0,0,B${s5.length+1}/SUM($B$${tFirst}:$B$${tLast}))`,s:0}]));
+ if(types.length)s5.push([{v:t('xlsTotal'),s:TB},{f:`SUM(B${tFirst}:B${tLast})`,s:TC},{v:'',s:TB}]);
+ s5.push([]);
+ s5.push([{v:t('xlsKmEvolution'),s:ST}]);
+ const kHead=s5.length+1;
+ s5.push([{v:t('date'),s:H},{v:t('km'),s:H},{v:t('cost'),s:H}]);
+ const ordered=[...recs].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+ ordered.forEach(r=>{const d=xserial(r.date);s5.push([d===null?{v:''}:{v:d,s:D},{v:Number(r.km)||0,s:K},{v:Number(r.cost)||0,s:C}])});
+ const kFirst=kHead+1,kLast=kHead+ordered.length;
+ /* referències dels gràfics */
+ const refYearCat=years.length?`$A$${yFirst}:$A$${yLast}`:`$A$${yFirst}:$A$${yFirst}`;
+ const refYearVal=years.length?`$B$${yFirst}:$B$${yLast}`:`$B$${yFirst}:$B$${yFirst}`;
+ const refTypeCat=types.length?`$A$${tFirst}:$A$${tLast}`:`$A$${tFirst}:$A$${tFirst}`;
+ const refTypeVal=types.length?`$B$${tFirst}:$B$${tLast}`:`$B$${tFirst}:$B$${tFirst}`;
+ const refKmCat=ordered.length?`$A$${kFirst}:$A$${kLast}`:`$A$${kFirst}:$A$${kFirst}`;
+ const refKmVal=ordered.length?`$B$${kFirst}:$B$${kLast}`:`$B$${kFirst}:$B$${kFirst}`;
+ const chart1=xchartBar(t('xlsCostByYear'),nmAn,refYearCat,refYearVal,t('totalCost'),'A8563A');
+ const chart2=xchartPie(t('xlsCostByType'),nmAn,refTypeCat,refTypeVal,t('totalCost'));
+ const chart3=xchartLine(t('xlsKmEvolution'),nmAn,refKmCat,refKmVal,t('km'),'17161A');
+ const drawing=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+${xanchor(2,'Chart 1',4,1,12,17,'rId1')}${xanchor(3,'Chart 2',13,1,21,17,'rId2')}${xanchor(4,'Chart 3',4,18,12,34,'rId3')}</xdr:wsDr>`;
+ const names=[nmSum,nmMaint,nmBrk,nmRem,nmAn];
+ const sheets=[
+  xsheet(s1,{widths:[30,26],tab:true}),
+  xsheet(s2,{widths:[12,10,20,46,18,12,13,13,10],freeze:1,headerRow:1,filter:`A1:I${Math.max(1,maint.length+1)}`}),
+  xsheet(s3,{widths:[12,10,26,46,14,12,18,12,13,13],freeze:1,headerRow:1,filter:`A1:J${Math.max(1,brk.length+1)}`}),
+  xsheet(s4,{widths:[24,34,14,14,16,14,12],freeze:1,headerRow:1,filter:`A1:G${Math.max(1,rem.length+1)}`}),
+  xsheet(s5,{widths:[16,16,14],drawing:true})
+ ];
+ const files=[];
+ files.push({name:'[Content_Types].xml',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+<Default Extension="xml" ContentType="application/xml"/>
+<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
+${names.map((n,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}
+<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>
+<Override PartName="/xl/drawings/drawing1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>
+<Override PartName="/xl/charts/chart1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/>
+<Override PartName="/xl/charts/chart2.xml" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/>
+<Override PartName="/xl/charts/chart3.xml" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/>
+<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>
+<Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>
+</Types>`});
+ files.push({name:'_rels/.rels',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
+<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>
+<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>
+</Relationships>`});
+ files.push({name:'docProps/core.xml',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<dc:title>${xe(t('xlsTitle')+' '+(v.plate||''))}</dc:title><dc:creator>Control de Vehicles</dc:creator><cp:lastModifiedBy>Control de Vehicles</cp:lastModifiedBy>
+<dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`});
+ files.push({name:'docProps/app.xml',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>Control de Vehicles</Application></Properties>`});
+ files.push({name:'xl/workbook.xml',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+<workbookPr/><sheets>${names.map((n,i)=>`<sheet name="${xe(n)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets><calcPr calcId="0" fullCalcOnLoad="1"/></workbook>`});
+ files.push({name:'xl/_rels/workbook.xml.rels',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+${names.map((n,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}
+<Relationship Id="rId${names.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+</Relationships>`});
+ files.push({name:'xl/styles.xml',data:XLSX_STYLES});
+ sheets.forEach((x,i)=>files.push({name:`xl/worksheets/sheet${i+1}.xml`,data:x}));
+ files.push({name:'xl/worksheets/_rels/sheet5.xml.rels',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/drawing1.xml"/>
+</Relationships>`});
+ files.push({name:'xl/drawings/drawing1.xml',data:drawing});
+ files.push({name:'xl/drawings/_rels/drawing1.xml.rels',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" Target="../charts/chart1.xml"/>
+<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" Target="../charts/chart2.xml"/>
+<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" Target="../charts/chart3.xml"/>
+</Relationships>`});
+ files.push({name:'xl/charts/chart1.xml',data:chart1});
+ files.push({name:'xl/charts/chart2.xml',data:chart2});
+ files.push({name:'xl/charts/chart3.xml',data:chart3});
+ const bytes=xlsxZip(files);
+ const fname=`${(v.plate||'vehicle').replace(/[^\w\-]+/g,'_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+ return {bytes,fname};
+}
+
+function saveBinary(bytes,fname,mime){
+ try{
+  const file=new File([bytes],fname,{type:mime});
+  if(window.isSecureContext&&navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
+   navigator.share({files:[file],title:fname}).then(()=>toast(t('sentOk'))).catch(err=>{
+    if(err&&err.name==='AbortError'){toast(t('cancelled'));return}
+    binaryDownload(bytes,fname,mime);
+   });
+   return;
+  }
+ }catch(e){}
+ if('showSaveFilePicker' in window){
+  window.showSaveFilePicker({suggestedName:fname,types:[{description:'Excel',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}]})
+   .then(h=>h.createWritable()).then(w=>w.write(bytes).then(()=>w.close()))
+   .then(()=>toast(t('savedOk')))
+   .catch(err=>{if(err&&err.name==='AbortError'){toast(t('cancelled'));return}binaryDownload(bytes,fname,mime)});
+  return;
+ }
+ binaryDownload(bytes,fname,mime);
+}
+function binaryDownload(bytes,fname,mime){
+ const blob=new Blob([bytes],{type:mime}),a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download=fname;a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+ toast(t('downloadedOk'));
+}
+function downloadVehicleExcel(id){
+ try{
+  const res=exportVehicleExcel(id);
+  if(!res)return;
+  saveBinary(res.bytes,res.fname,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+ }catch(e){console.error(e);toast(t('xlsFail'))}
+}
+
 function importDB(file){const reader=new FileReader();reader.onload=()=>{try{const x=JSON.parse(reader.result);if(!x||!Array.isArray(x.vehicles))throw Error();if(!confirm(t('importConfirm',{n:x.vehicles.length})))return;db=x;db.version=1;if(saveDB())toast(t('importedOk'))}catch(e){toast(t('invalidFile'))}};reader.readAsText(file)}
 function toggleCard(el){el.closest('.vehicle-card').classList.toggle('expanded')}
 function dashboardHTML(){const vs=db.vehicles,open=vs.reduce((n,v)=>n+(v.breakdowns||[]).filter(r=>r.status!=='Cerrada').length,0),itv=vs.filter(v=>['soon','expired'].includes(itvState(v))).length,total=vs.reduce((n,v)=>n+totalCost(v),0),year=String(new Date().getFullYear()),yearCost=vs.reduce((n,v)=>n+allRecords(v).filter(r=>(r.date||'').startsWith(year)).reduce((a,r)=>a+(Number(r.cost)||0),0),0),records=vs.flatMap(v=>allRecords(v));return `<div class="dashboard-grid"><div class="dash-card"><span>${t('vehiclesL')}</span><strong>${vs.length}</strong></div><div class="dash-card"><span>${t('openBreak')}</span><strong>${open}</strong></div><div class="dash-card"><span>${t('activeAlerts')}</span><strong>${vs.reduce((n,v)=>n+activeWarnings(v).length,0)}</strong></div><div class="dash-card"><span>${t('totalCost')}</span><strong>${money(total)}</strong></div></div><div class="dash-sections"><div class="dash-panel"><h3>${t('economy')}</h3><div class="dash-line"><span>${t('costIn')} ${year}</span><strong>${money(yearCost)}</strong></div><div class="dash-line"><span>${t('avgVehicle')}</span><strong>${money(vs.length?total/vs.length:0)}</strong></div></div><div class="dash-panel"><h3>${t('activity')}</h3><div class="dash-line"><span>${t('totalRecords')}</span><strong>${records.length}</strong></div><div class="dash-line"><span>${t('maintenancesL')}</span><strong>${vs.reduce((n,v)=>n+(v.maintenance||[]).length,0)}</strong></div><div class="dash-line"><span>${t('breakdownsRec')}</span><strong>${vs.reduce((n,v)=>n+(v.breakdowns||[]).length,0)}</strong></div></div></div>`}
