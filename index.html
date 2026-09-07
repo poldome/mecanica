@@ -130,8 +130,8 @@ function gallerySection(v){const imgs=allRecords(v).flatMap(r=>(r.images||[]).ma
 function showImage(src){$('#lightbox img').src=src;$('#lightbox').classList.remove('hidden')}
 let pendingShareFile=null;
 function buildBackupPayload(){
- const json=JSON.stringify(db,null,2),d=new Date().toISOString().slice(0,10);
- return {json,base:`backup_vehiculos_${d}`};
+ const json=JSON.stringify(db,null,2);
+ return {json,base:'backup_vehiculos'};
 }
 function prepareShareFile(){
  pendingShareFile=null;
