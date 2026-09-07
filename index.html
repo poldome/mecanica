@@ -31,6 +31,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text"
 /* V6: programación por fecha/kilómetros sobre diseño Apple */
 .backup-strip{padding:7px 10px;min-height:44px;border-radius:15px}.backup-buttons{gap:6px}.backup-buttons .btn{padding:6px 10px!important;min-height:30px;font-size:12px;border-radius:10px;box-shadow:none}.backup-copy strong{font-size:12px!important}.backup-copy small{font-size:10px!important}.vehicle-head{position:relative}.vehicle-card.has-warning .vehicle-head:before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 4px 4px 0;background:var(--orange)}.vehicle-card.has-overdue .vehicle-head:before{background:var(--red)}.schedule-box{grid-column:1/-1;padding:13px;border-radius:16px;background:#f5f1ee;border:1px solid var(--line)}.schedule-box h4{margin:0 0 10px;font-size:14px}.schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.reminder-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.reminder-item{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff}.reminder-main strong{display:block;font-size:13px}.reminder-main small{display:block;color:var(--muted);margin-top:3px}.warning-summary{margin-top:10px}.vehicle-card.expanded .vehicle-body{animation:revealCard .2s ease-out}@keyframes revealCard{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 @media(max-width:650px){.backup-strip{flex-direction:row;align-items:center}.backup-strip .backup-copy{display:none}.backup-buttons{display:flex;margin-left:auto}.backup-buttons .btn{width:auto!important;flex:none!important;padding:6px 9px!important}.schedule-grid{grid-template-columns:1fr}.reminder-item{align-items:flex-start}.reminder-item .record-tools{flex-shrink:0}}
+
+.save-options{display:flex;flex-direction:column;gap:10px}.save-option{width:100%;flex-direction:column;align-items:flex-start;gap:3px;padding:14px 16px;text-align:left;border-radius:16px}.save-option strong{font-size:14px}.save-option small{font-weight:500;opacity:.75;font-size:12px}.save-option[disabled]{opacity:.45;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -126,41 +128,62 @@ function removeTempImage(i){tempImages.splice(i,1);renderImagePreview()}
 function deleteRecord(kind,id){if(!confirm('¿Eliminar este registro?'))return;const v=vehicleById(currentVehicleId),key=kind==='maintenance'?'maintenance':'breakdowns';v[key]=v[key].filter(x=>x.id!==id);saveDB();openDetail(v.id,key==='maintenance'?'maintenance':'breakdowns');toast('Registro eliminado')}
 function gallerySection(v){const imgs=allRecords(v).flatMap(r=>(r.images||[]).map(im=>({...im,date:r.date,title:r.title||r.type})));return `<div class="section-top"><h3>Galería de imágenes</h3><span class="hint">${imgs.length} imagen${imgs.length===1?'':'es'}</span></div>${imgs.length?`<div class="gallery">${imgs.map(im=>`<figure><img src="${im.data}" alt="${esc(im.name)}" onclick="showImage(this.src)"><figcaption>${dateFmt(im.date)} · ${esc(im.title||'Registro')}</figcaption></figure>`).join('')}</div>`:'<div class="empty"><p>Las imágenes añadidas a mantenimientos y averías aparecerán aquí.</p></div>'}`}
 function showImage(src){$('#lightbox img').src=src;$('#lightbox').classList.remove('hidden')}
-async function exportDB(){
- if(!db.vehicles.length&&!confirm('La base de datos está vacía. ¿Quieres exportarla igualmente?'))return;
- const json=JSON.stringify(db,null,2),d=new Date().toISOString().slice(0,10),base=`backup_vehiculos_${d}`;
- // Chrome Android sólo permite compartir ciertos tipos de archivo. Probamos varias combinaciones.
- const candidates=[
-  {name:base+'.json',type:'application/json'},
-  {name:base+'.txt', type:'text/plain'},
-  {name:base+'.csv', type:'text/csv'}
- ];
- if(navigator.share&&window.isSecureContext){
-  for(const c of candidates){
-   let file;
-   try{file=new File([json],c.name,{type:c.type})}catch(e){continue}
-   if(!(navigator.canShare&&navigator.canShare({files:[file]})))continue;
-   try{
-    await navigator.share({files:[file],title:'Copia de seguridad de vehículos'});
-    toast('Copia enviada al destino elegido');return;
-   }catch(err){
-    if(err&&err.name==='AbortError'){toast('Guardado cancelado');return}
-   }
-  }
- }
- if('showSaveFilePicker' in window){
+function buildBackupPayload(){
+ const json=JSON.stringify(db,null,2),d=new Date().toISOString().slice(0,10);
+ return {json,base:`backup_vehiculos_${d}`};
+}
+function shareSupport(){
+ if(!window.isSecureContext)return{ok:false,reason:'La página no está en HTTPS'};
+ if(!navigator.share)return{ok:false,reason:'Este navegador no permite compartir archivos'};
+ const {json,base}=buildBackupPayload();
+ const types=[['.json','application/json'],['.txt','text/plain'],['.csv','text/csv']];
+ for(const [ext,type] of types){
   try{
-   const handle=await window.showSaveFilePicker({suggestedName:base+'.json',types:[{description:'Copia de seguridad JSON',accept:{'application/json':['.json']}}]});
-   const w=await handle.createWritable();await w.write(json);await w.close();
-   toast('Copia guardada');return;
-  }catch(err){
-   if(err&&err.name==='AbortError'){toast('Guardado cancelado');return}
-  }
+   const f=new File([json],base+ext,{type});
+   if(navigator.canShare&&navigator.canShare({files:[f]}))return{ok:true,file:f};
+  }catch(e){}
  }
+ return{ok:false,reason:'El sistema no admite compartir este tipo de archivo'};
+}
+async function shareBackup(){
+ const sup=shareSupport();
+ if(!sup.ok){toast(sup.reason);return}
+ try{
+  await navigator.share({files:[sup.file],title:'Copia de seguridad de vehículos'});
+  closeModal();toast('Copia enviada al destino elegido');
+ }catch(err){
+  if(err&&err.name==='AbortError'){toast('Guardado cancelado');return}
+  toast('No se ha podido compartir: '+(err&&err.message?err.message:'error desconocido'));
+ }
+}
+async function pickAndSaveBackup(){
+ const {json,base}=buildBackupPayload();
+ if(!('showSaveFilePicker' in window)){toast('Este navegador no permite elegir carpeta');return}
+ try{
+  const handle=await window.showSaveFilePicker({suggestedName:base+'.json',types:[{description:'Copia de seguridad JSON',accept:{'application/json':['.json']}}]});
+  const w=await handle.createWritable();await w.write(json);await w.close();
+  closeModal();toast('Copia guardada');
+ }catch(err){
+  if(err&&err.name==='AbortError'){toast('Guardado cancelado');return}
+  toast('No se ha podido guardar');
+ }
+}
+function downloadBackup(){
+ const {json,base}=buildBackupPayload();
  const blob=new Blob([json],{type:'application/json'}),a=document.createElement('a');
  a.href=URL.createObjectURL(blob);a.download=base+'.json';a.click();
  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
- toast(window.isSecureContext?'Copia descargada · comparte desde Descargas':'Abre la app por HTTPS para elegir destino');
+ closeModal();toast('Copia descargada');
+}
+function exportDB(){
+ if(!db.vehicles.length&&!confirm('La base de datos está vacía. ¿Quieres exportarla igualmente?'))return;
+ const sup=shareSupport(),picker='showSaveFilePicker' in window;
+ modal(`<div class="modal-head"><h2>Guardar copia</h2><button class="close" onclick="closeModal()">×</button></div>
+ <div class="modal-body"><div class="save-options">
+  <button class="btn btn-primary save-option" ${sup.ok?'':'disabled'} onclick="shareBackup()"><strong>Enviar a Drive, Dropbox, Archivos…</strong><small>${sup.ok?'Se abrirá el menú del sistema para elegir destino':esc(sup.reason)}</small></button>
+  ${picker?`<button class="btn btn-soft save-option" onclick="pickAndSaveBackup()"><strong>Elegir carpeta del equipo</strong><small>Diálogo Guardar como</small></button>`:''}
+  <button class="btn btn-soft save-option" onclick="downloadBackup()"><strong>Descargar en el dispositivo</strong><small>Se guardará en la carpeta de descargas</small></button>
+ </div><div class="hint" style="margin-top:12px">Si en Android quieres que el navegador pregunte siempre, activa <strong>Chrome → Ajustes → Descargas → Preguntar dónde guardar cada archivo</strong>.</div></div>`);
 }
 function importDB(file){const reader=new FileReader();reader.onload=()=>{try{const x=JSON.parse(reader.result);if(!x||!Array.isArray(x.vehicles))throw Error();if(!confirm(`Se importarán ${x.vehicles.length} vehículos y se reemplazarán los datos actuales. ¿Continuar?`))return;db=x;db.version=1;if(saveDB())toast('Base de datos importada correctamente')}catch(e){toast('El archivo no es una copia de seguridad válida')}};reader.readAsText(file)}
 
